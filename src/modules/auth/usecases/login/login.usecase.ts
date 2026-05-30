@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LocalAuthRepository } from '../../local/repository/local-auth.repository';
+import { LocalAuthRepository } from '../../repository/local-auth.repository';
 import { PasswordHasherService } from '../../services/password-hasher.service';
 import { TokenPairService } from '../../services/token-pair.service';
 import { UsersRepository } from '../../../users/repository/users.repository';

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { LocalAuthEntity } from '../../local/entities/local-auth.entity';
+import { LocalAuthEntity } from '../../entities/local-auth.entity';
 import { PasswordHasherService } from '../../services/password-hasher.service';
 import { TokenPairService } from '../../services/token-pair.service';
 import { UserEntity } from '../../../users/entities/user.entity';

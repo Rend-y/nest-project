@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
-import { LocalAuthRepository } from './local/repository/local-auth.repository';
+import { AuthGuard } from './guards/auth.guard';
+import { LocalAuthRepository } from './repository/local-auth.repository';
 import { PasswordHasherService } from './services/password-hasher.service';
 import { TokenPairService } from './services/token-pair.service';
 import { TokenService } from './services/token.service';
-import { AuthSessionsRepository } from './sessions/repository/auth-sessions.repository';
+import { AuthSessionsRepository } from './repository/auth-sessions.repository';
 import { LoginController } from './usecases/login/login.controller';
 import { LoginUseCase } from './usecases/login/login.usecase';
 import { LogoutController } from './usecases/logout/logout.controller';
@@ -16,7 +17,7 @@ import { RegisterController } from './usecases/register/register.controller';
 import { RegisterUseCase } from './usecases/register/register.usecase';
 
 @Module({
-  imports: [UsersModule, JwtModule.register({})],
+  imports: [forwardRef(() => UsersModule), JwtModule.register({})],
   controllers: [
     RegisterController,
     LoginController,
@@ -29,11 +30,12 @@ import { RegisterUseCase } from './usecases/register/register.usecase';
     PasswordHasherService,
     TokenService,
     TokenPairService,
+    AuthGuard,
     RegisterUseCase,
     LoginUseCase,
     RefreshTokenUseCase,
     LogoutUseCase,
   ],
-  exports: [LocalAuthRepository],
+  exports: [LocalAuthRepository, AuthGuard, TokenService],
 })
 export class AuthModule {}

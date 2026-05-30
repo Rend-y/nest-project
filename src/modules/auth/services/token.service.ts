@@ -3,7 +3,7 @@ import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { authEnv } from '../../../core/env';
 
-type AccessTokenPayload = {
+export type AccessTokenPayload = {
   sub: string;
   username: string;
   type: 'access';
@@ -31,6 +31,24 @@ export class TokenService {
         expiresIn: this.authConfig.accessTtlSeconds,
       },
     );
+  }
+
+  async verifyAccessToken(token: string): Promise<AccessTokenPayload> {
+    try {
+      const payload = await this.jwtService.verifyAsync<AccessTokenPayload>(
+        token,
+        {
+          secret: this.authConfig.accessSecret,
+        },
+      );
+
+      if (payload.type !== 'access')
+        throw new UnauthorizedException('Invalid token');
+
+      return payload;
+    } catch {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   signRefreshToken(userId: string, sessionId: string): Promise<string> {

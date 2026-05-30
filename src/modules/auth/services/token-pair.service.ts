@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { AuthSessionsRepository } from '../sessions/repository/auth-sessions.repository';
+import { AuthSessionsRepository } from '../repository/auth-sessions.repository';
 import { UserEntity } from '../../users/entities/user.entity';
 import { PasswordHasherService } from './password-hasher.service';
 import { TokenService } from './token.service';
