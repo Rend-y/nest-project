@@ -17,3 +17,16 @@ export const databaseEnv = registerAs('databaseConfiguration', () => ({
 export const redisEnv = registerAs('redisConfiguration', () => ({
   url: env.get('REDIS_URL').required().asString(),
 }));
+
+export const authEnv = registerAs('authConfiguration', () => ({
+  accessSecret: env.get('JWT_ACCESS_SECRET').required().asString(),
+  refreshSecret: env.get('JWT_REFRESH_SECRET').required().asString(),
+  accessTtlSeconds: env
+    .get('JWT_ACCESS_TTL_SECONDS')
+    .default(900)
+    .asIntPositive(),
+  refreshTtlSeconds: env
+    .get('JWT_REFRESH_TTL_SECONDS')
+    .default(2592000)
+    .asIntPositive(),
+}));

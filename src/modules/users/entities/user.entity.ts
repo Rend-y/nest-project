@@ -3,12 +3,17 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('users')
+@Index('UQ_users_username', ['username'], {
+  unique: true,
+  where: '"deleted_at" IS NULL',
+})
 @Unique('UQ_users_username_email', ['username', 'email'])
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
