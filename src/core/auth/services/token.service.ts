@@ -1,6 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { randomUUID } from 'crypto';
 import { authEnv } from '../../env';
 
 export type AccessTokenPayload = {
@@ -12,6 +13,7 @@ export type AccessTokenPayload = {
 type RefreshTokenPayload = {
   sub: string;
   sid: string;
+  jti: string;
   type: 'refresh';
 };
 
@@ -57,6 +59,7 @@ export class TokenService {
       {
         sub: userId,
         sid: sessionId,
+        jti: randomUUID(),
         type: 'refresh',
       } satisfies RefreshTokenPayload,
       {

@@ -74,22 +74,13 @@ export class TokenPairService {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const nextRefreshToken = await this.tokenService.signRefreshToken(
-      session.userId,
-      session.id,
-    );
-
-    session.refreshTokenHash = await this.passwordHasher.hash(nextRefreshToken);
-    session.expiresAt = this.tokenService.getRefreshExpiresAt();
+    session.revokedAt = new Date();
     await this.authSessionsRepository.save(session);
 
-    return {
-      accessToken: await this.tokenService.signAccessToken(
-        session.userId,
-        session.user.username,
-      ),
-      refreshToken: nextRefreshToken,
-    };
+    return this.create(session.user, {
+      userAgent: session.userAgent,
+      ip: session.ip,
+    });
   }
 
   async revoke(refreshToken: string): Promise<void> {

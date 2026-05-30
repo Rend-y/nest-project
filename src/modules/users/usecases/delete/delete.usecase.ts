@@ -6,10 +6,14 @@ export class DeleteUserUseCase {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute(id: string): Promise<void> {
-    const result = await this.usersRepository.softDelete({ id });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
 
-    if (result.affected !== 1) {
+    if (user === null) {
       throw new NotFoundException('User not found');
     }
+
+    await this.usersRepository.softDelete({ id });
   }
 }
