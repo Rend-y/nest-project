@@ -1,5 +1,5 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { AuthModule } from '../auth/auth.module';
+import { Module } from '@nestjs/common';
+import { CoreAuthModule } from '../../core/auth';
 import { UsersRepository } from './repository/users.repository';
 import { GetUserByIdController } from './usecases/get-by-id/get-by-id.controller';
 import { GetUserByIdUseCase } from './usecases/get-by-id/get-by-id.usecase';
@@ -9,7 +9,7 @@ import { MeController } from './usecases/me/me.controller';
 import { MeUseCase } from './usecases/me/me.usecase';
 
 @Module({
-  imports: [forwardRef(() => AuthModule)],
+  imports: [CoreAuthModule],
   controllers: [MeController, ListUsersController, GetUserByIdController],
   providers: [UsersRepository, MeUseCase, ListUsersUseCase, GetUserByIdUseCase],
   exports: [UsersRepository],

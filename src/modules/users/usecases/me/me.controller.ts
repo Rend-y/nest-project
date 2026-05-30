@@ -1,7 +1,6 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import type { AuthenticatedRequest } from '../../../auth/types/authenticated-request';
-import { AuthGuard } from '../../../auth/guards/auth.guard';
+import { AuthGuard, UserId } from '../../../../core/auth';
 import { MeResponseDto } from './dto/response.dto';
 import { MeUseCase } from './me.usecase';
 
@@ -14,7 +13,7 @@ export class MeController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: MeResponseDto })
   @UseGuards(AuthGuard)
-  me(@Req() request: AuthenticatedRequest): Promise<MeResponseDto> {
-    return this.meUseCase.execute(request.user.sub);
+  me(@UserId() userId: string): Promise<MeResponseDto> {
+    return this.meUseCase.execute(userId);
   }
 }

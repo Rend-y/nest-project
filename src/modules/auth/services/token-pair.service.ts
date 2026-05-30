@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { TokenService } from '../../../core/auth';
 import { AuthSessionsRepository } from '../repository/auth-sessions.repository';
 import { UserEntity } from '../../users/entities/user.entity';
 import { PasswordHasherService } from './password-hasher.service';
-import { TokenService } from './token.service';
 
 type SessionMeta = {
   userAgent?: string | null;

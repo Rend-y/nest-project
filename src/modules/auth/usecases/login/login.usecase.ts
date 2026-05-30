@@ -20,7 +20,10 @@ export class LoginUseCase {
     private readonly tokenPairService: TokenPairService,
   ) {}
 
-  async execute(dto: LoginRequestDto, meta: AuthMeta): Promise<LoginResponseDto> {
+  async execute(
+    dto: LoginRequestDto,
+    meta: AuthMeta,
+  ): Promise<LoginResponseDto> {
     const user = await this.usersRepository.findOne({
       where: { username: dto.username },
     });

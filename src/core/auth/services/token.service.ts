@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { authEnv } from '../../../core/env';
+import { authEnv } from '../../env';
 
 export type AccessTokenPayload = {
   sub: string;
@@ -42,8 +42,9 @@ export class TokenService {
         },
       );
 
-      if (payload.type !== 'access')
+      if (payload.type !== 'access') {
         throw new UnauthorizedException('Invalid token');
+      }
 
       return payload;
     } catch {

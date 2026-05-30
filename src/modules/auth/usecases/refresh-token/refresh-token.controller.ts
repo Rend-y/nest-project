@@ -11,7 +11,9 @@ export class RefreshTokenController {
 
   @Post('refresh')
   @ApiOkResponse({ type: RefreshTokenResponseDto })
-  refresh(@Body() dto: RefreshTokenRequestDto): Promise<RefreshTokenResponseDto> {
+  refresh(
+    @Body() dto: RefreshTokenRequestDto,
+  ): Promise<RefreshTokenResponseDto> {
     return this.refreshTokenUseCase.execute(dto);
   }
 }

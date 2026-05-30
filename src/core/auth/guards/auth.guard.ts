@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { TokenService } from '../services/token.service';
-import type { AuthenticatedRequest } from '../types/authenticated-request';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,12 +15,14 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractBearerToken(request);
 
-    if (!token) {
-      throw new UnauthorizedException('Authorization is required');
-    }
+    if (!token) throw new UnauthorizedException('Authorization is required');
 
     const payload = await this.tokenService.verifyAccessToken(token);
-    (request as AuthenticatedRequest).user = payload;
+
+    if (!('user' in request))
+      throw new UnauthorizedException('Authorization is invalid');
+
+    request.user = payload;
 
     return true;
   }

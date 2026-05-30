@@ -1,13 +1,13 @@
-import {ConfigType} from '@nestjs/config';
-import {Logger, ValidationPipe} from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import {appEnv} from "./core/env";
+import { appEnv } from './core/env';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
-      logger: new Logger(),
+    logger: new Logger(),
   });
   const bootstrapLog = new Logger('bootstrap');
   const appConfig = app.get<ConfigType<typeof appEnv>>(appEnv.KEY);
@@ -30,8 +30,11 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(appConfig.port, () => {
-      bootstrapLog.log(`App listening on port ${appConfig.port}`);
+    bootstrapLog.log(`App listening on port ${appConfig.port}`);
   });
 }
 
-bootstrap();
+bootstrap().catch((error: unknown) => {
+  Logger.error(error, 'Bootstrap');
+  process.exit(1);
+});

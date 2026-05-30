@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '../../../auth/guards/auth.guard';
+import { AuthGuard } from '../../../../core/auth';
 import { ListUsersResponseDto } from './dto/response.dto';
 import { ListUsersUseCase } from './list.usecase';
 

@@ -18,8 +18,6 @@ export class HealthController {
   @HealthCheck()
   @ApiOperation({ summary: 'Application health check' })
   check() {
-    return this.health.check([
-      () => this.database.pingCheck('database'),
-    ]);
+    return this.health.check([() => this.database.pingCheck('database')]);
   }
 }
