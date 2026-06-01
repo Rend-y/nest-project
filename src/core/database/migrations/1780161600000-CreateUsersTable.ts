@@ -14,8 +14,7 @@ export class CreateUsersTable1780161600000 implements MigrationInterface {
         "created_at" TIMESTAMP NOT NULL DEFAULT now(),
         "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
         "deleted_at" TIMESTAMP,
-        CONSTRAINT "PK_users_id" PRIMARY KEY ("id"),
-        CONSTRAINT "UQ_users_username_email" UNIQUE ("username", "email")
+        CONSTRAINT "PK_users_id" PRIMARY KEY ("id")
       )
     `);
   }

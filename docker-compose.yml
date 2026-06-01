@@ -13,7 +13,6 @@ services:
       DATABASE_USERNAME: ${POSTGRES_USER:-nest}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-nest}
       DATABASE_NAME: ${POSTGRES_DB:-nest_project}
-      DATABASE_URL: ${DATABASE_URL:-postgresql://nest:nest@postgres:5432/nest_project}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
     ports:
       - "${PORT:-3000}:3000"

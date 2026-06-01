@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -11,6 +12,7 @@ import {
 import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('auth_sessions')
+@Index('IDX_auth_sessions_user_id', ['userId'])
 export class AuthSessionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

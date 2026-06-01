@@ -5,7 +5,6 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -14,7 +13,10 @@ import {
   unique: true,
   where: '"deleted_at" IS NULL',
 })
-@Unique('UQ_users_username_email', ['username', 'email'])
+@Index('UQ_users_email', ['email'], {
+  unique: true,
+  where: '"deleted_at" IS NULL',
+})
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

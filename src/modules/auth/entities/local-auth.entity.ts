@@ -6,16 +6,18 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('local_auth')
+@Unique('UQ_local_auth_user_id', ['userId'])
 export class LocalAuthEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'user_id', type: 'uuid', unique: true })
+  @Column({ name: 'user_id', type: 'uuid' })
   userId: string;
 
   @OneToOne(() => UserEntity, { onDelete: 'CASCADE' })

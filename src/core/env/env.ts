@@ -11,7 +11,6 @@ export const databaseEnv = registerAs('databaseConfiguration', () => ({
   username: env.get('DATABASE_USERNAME').required().asString(),
   password: env.get('DATABASE_PASSWORD').required().asString(),
   name: env.get('DATABASE_NAME').required().asString(),
-  url: env.get('DATABASE_URL').required().asString(),
 }));
 
 export const redisEnv = registerAs('redisConfiguration', () => ({

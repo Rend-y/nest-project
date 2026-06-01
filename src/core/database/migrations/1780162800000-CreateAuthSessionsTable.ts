@@ -9,6 +9,10 @@ export class CreateAuthSessionsTable1780162800000 implements MigrationInterface 
       WHERE "deleted_at" IS NULL
     `);
     await queryRunner.query(`
+      CREATE UNIQUE INDEX "UQ_users_email" ON "users" ("email")
+      WHERE "deleted_at" IS NULL
+    `);
+    await queryRunner.query(`
       CREATE TABLE "auth_sessions" (
         "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
         "user_id" uuid NOT NULL,
@@ -32,6 +36,7 @@ export class CreateAuthSessionsTable1780162800000 implements MigrationInterface 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP INDEX "IDX_auth_sessions_user_id"`);
     await queryRunner.query(`DROP TABLE "auth_sessions"`);
+    await queryRunner.query(`DROP INDEX "UQ_users_email"`);
     await queryRunner.query(`DROP INDEX "UQ_users_username"`);
   }
 }

@@ -6,10 +6,8 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../../src/app.module';
 import { UsersRepository } from '../../src/modules/users/repository/users.repository';
 import {
-  buildDatabaseUrl,
   createTemporaryDatabase,
   dropTemporaryDatabase,
-  getOptionalEnv,
   getRequiredDatabaseName,
 } from './utils/database';
 import { expectAuthResponse, expectUserResponse } from './utils/response';
@@ -56,15 +54,12 @@ export type TE2eTestContext = {
 export const setupE2eTest = (): (() => TE2eTestContext) => {
   let context: TE2eTestContext | null = null;
   let originalDatabaseName: string | null = null;
-  let originalDatabaseUrl: string | null = null;
   let temporaryDatabaseName: string | null = null;
 
   beforeAll(async () => {
     originalDatabaseName = getRequiredDatabaseName();
-    originalDatabaseUrl = getOptionalEnv('DATABASE_URL');
     temporaryDatabaseName = await createTemporaryDatabase();
     process.env.DATABASE_NAME = temporaryDatabaseName;
-    process.env.DATABASE_URL = buildDatabaseUrl(temporaryDatabaseName);
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -144,12 +139,6 @@ export const setupE2eTest = (): (() => TE2eTestContext) => {
 
     if (originalDatabaseName !== null) {
       process.env.DATABASE_NAME = originalDatabaseName;
-    }
-
-    if (originalDatabaseUrl !== null) {
-      process.env.DATABASE_URL = originalDatabaseUrl;
-    } else {
-      delete process.env.DATABASE_URL;
     }
 
     if (databaseName !== null) {

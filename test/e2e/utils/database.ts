@@ -21,16 +21,6 @@ const getEnvWithDefault = (name: string, defaultValue: string): string => {
   return value;
 };
 
-export const getOptionalEnv = (name: string): string | null => {
-  const value = process.env[name];
-
-  if (!value) {
-    return null;
-  }
-
-  return value;
-};
-
 export const getRequiredDatabaseName = (): string =>
   getRequiredEnv('DATABASE_NAME');
 
@@ -43,15 +33,6 @@ const quoteIdentifier = (identifier: string): string => {
   }
 
   return `"${identifier}"`;
-};
-
-export const buildDatabaseUrl = (databaseName: string): string => {
-  const username = encodeURIComponent(getRequiredEnv('DATABASE_USERNAME'));
-  const password = encodeURIComponent(getRequiredEnv('DATABASE_PASSWORD'));
-  const host = getRequiredEnv('DATABASE_HOST');
-  const port = getRequiredEnv('DATABASE_PORT');
-
-  return `postgresql://${username}:${password}@${host}:${port}/${databaseName}`;
 };
 
 const createMaintenanceDataSource = (): DataSource =>
