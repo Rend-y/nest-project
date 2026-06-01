@@ -17,7 +17,7 @@ import { databaseEnv } from '../env';
         database: databaseConfig.name,
         entities: [join(__dirname, '../../**/*.entity{.ts,.js}')],
         migrations: [join(__dirname, './migrations/*{.ts,.js}')],
-        migrationsRun: false,
+        migrationsRun: true,
         synchronize: false,
       }),
     }),

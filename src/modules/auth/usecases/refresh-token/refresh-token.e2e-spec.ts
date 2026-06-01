@@ -51,6 +51,30 @@ describe('RefreshTokenController e2e', () => {
       .expect(401);
   });
 
+  it('rejects concurrent refresh token reuse', async () => {
+    const { api, registerUser } = getContext();
+    const { auth } = await registerUser();
+
+    const responses = await Promise.allSettled([
+      api().post('/auth/refresh').send({
+        refreshToken: auth.refreshToken,
+      }),
+      api().post('/auth/refresh').send({
+        refreshToken: auth.refreshToken,
+      }),
+    ]);
+
+    const statuses = responses.map((response) => {
+      if (response.status === 'rejected') {
+        throw response.reason;
+      }
+
+      return response.value.status;
+    });
+
+    expect(statuses.sort()).toEqual([201, 401]);
+  });
+
   it('rejects invalid refresh token', async () => {
     const { api } = getContext();
 

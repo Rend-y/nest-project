@@ -6,7 +6,7 @@ import { appEnv, authEnv, databaseEnv, redisEnv } from './env';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env', '.env.example'],
+      envFilePath: ['.env'],
       load: [appEnv, databaseEnv, redisEnv, authEnv],
     }),
   ],
