@@ -13,7 +13,7 @@ import {
   getRequiredDatabaseName,
 } from './utils/database';
 import { expectAuthResponse, expectUserResponse } from './utils/response';
-import type { AuthResponse, UserResponse } from './utils/response';
+import type { TAuthResponse, TUserResponse } from './utils/response';
 import { uniqueSuffix } from './utils/value';
 
 export {
@@ -31,30 +31,30 @@ export {
 } from './utils/response';
 export { uniqueSuffix } from './utils/value';
 
-type RegisterUserOptions = {
+type TRegisterUserOptions = {
   username?: string | null;
   email?: string | null;
   age?: number | null;
   password?: string | null;
 };
 
-type RegisteredUser = {
-  auth: AuthResponse;
-  user: UserResponse;
+type TRegisteredUser = {
+  auth: TAuthResponse;
+  user: TUserResponse;
   password: string;
 };
 
-export type E2eTestContext = {
+export type TE2eTestContext = {
   app: INestApplication;
   dataSource: DataSource;
   usersRepository: UsersRepository;
   databaseName: string;
   api: () => request.Agent;
-  registerUser: (options?: RegisterUserOptions) => Promise<RegisteredUser>;
+  registerUser: (options?: TRegisterUserOptions) => Promise<TRegisteredUser>;
 };
 
-export const setupE2eTest = (): (() => E2eTestContext) => {
-  let context: E2eTestContext | null = null;
+export const setupE2eTest = (): (() => TE2eTestContext) => {
+  let context: TE2eTestContext | null = null;
   let originalDatabaseName: string | null = null;
   let originalDatabaseUrl: string | null = null;
   let temporaryDatabaseName: string | null = null;
@@ -86,12 +86,13 @@ export const setupE2eTest = (): (() => E2eTestContext) => {
     await dataSource.runMigrations();
 
     const api = (): request.Agent => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return request(app.getHttpServer());
     };
 
     const registerUser = async (
-      options: RegisterUserOptions = {},
-    ): Promise<RegisteredUser> => {
+      options: TRegisterUserOptions = {},
+    ): Promise<TRegisteredUser> => {
       const suffix = uniqueSuffix();
       const password = options.password ?? 'password123';
       const authResponse = await api()

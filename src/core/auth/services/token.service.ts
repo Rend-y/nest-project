@@ -3,19 +3,10 @@ import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'crypto';
 import { authEnv } from '../../env';
-
-export type AccessTokenPayload = {
-  sub: string;
-  username: string;
-  type: 'access';
-};
-
-type RefreshTokenPayload = {
-  sub: string;
-  sid: string;
-  jti: string;
-  type: 'refresh';
-};
+import {
+  TAccessTokenPayload,
+  TRefreshTokenPayload,
+} from '../types/token.service';
 
 @Injectable()
 export class TokenService {
@@ -27,7 +18,7 @@ export class TokenService {
 
   signAccessToken(userId: string, username: string): Promise<string> {
     return this.jwtService.signAsync(
-      { sub: userId, username, type: 'access' } satisfies AccessTokenPayload,
+      { sub: userId, username, type: 'access' } satisfies TAccessTokenPayload,
       {
         secret: this.authConfig.accessSecret,
         expiresIn: this.authConfig.accessTtlSeconds,
@@ -35,9 +26,9 @@ export class TokenService {
     );
   }
 
-  async verifyAccessToken(token: string): Promise<AccessTokenPayload> {
+  async verifyAccessToken(token: string): Promise<TAccessTokenPayload> {
     try {
-      const payload = await this.jwtService.verifyAsync<AccessTokenPayload>(
+      const payload = await this.jwtService.verifyAsync<TAccessTokenPayload>(
         token,
         {
           secret: this.authConfig.accessSecret,
@@ -61,7 +52,7 @@ export class TokenService {
         sid: sessionId,
         jti: randomUUID(),
         type: 'refresh',
-      } satisfies RefreshTokenPayload,
+      } satisfies TRefreshTokenPayload,
       {
         secret: this.authConfig.refreshSecret,
         expiresIn: this.authConfig.refreshTtlSeconds,
@@ -69,9 +60,9 @@ export class TokenService {
     );
   }
 
-  async verifyRefreshToken(token: string): Promise<RefreshTokenPayload> {
+  async verifyRefreshToken(token: string): Promise<TRefreshTokenPayload> {
     try {
-      const payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
+      const payload = await this.jwtService.verifyAsync<TRefreshTokenPayload>(
         token,
         {
           secret: this.authConfig.refreshSecret,

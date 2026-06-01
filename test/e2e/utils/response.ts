@@ -1,27 +1,27 @@
-export type AuthResponse = {
+export type TAuthResponse = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type UserResponse = {
+export type TUserResponse = {
   id: string;
   username: string;
   age: number;
   email: string;
 };
 
-export type ListUsersResponse = {
-  users: UserResponse[];
+export type TListUsersResponse = {
+  users: TUserResponse[];
 };
 
-export type LogoutResponse = {
+export type TLogoutResponse = {
   success: boolean;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
-export const expectAuthResponse = (value: unknown): AuthResponse => {
+export const expectAuthResponse = (value: unknown): TAuthResponse => {
   if (
     !isRecord(value) ||
     typeof value.accessToken !== 'string' ||
@@ -36,7 +36,7 @@ export const expectAuthResponse = (value: unknown): AuthResponse => {
   };
 };
 
-export const expectUserResponse = (value: unknown): UserResponse => {
+export const expectUserResponse = (value: unknown): TUserResponse => {
   if (
     !isRecord(value) ||
     typeof value.id !== 'string' ||
@@ -55,7 +55,7 @@ export const expectUserResponse = (value: unknown): UserResponse => {
   };
 };
 
-export const expectListUsersResponse = (value: unknown): ListUsersResponse => {
+export const expectListUsersResponse = (value: unknown): TListUsersResponse => {
   if (!isRecord(value) || !Array.isArray(value.users)) {
     throw new Error('Expected list users response');
   }
@@ -65,7 +65,7 @@ export const expectListUsersResponse = (value: unknown): ListUsersResponse => {
   };
 };
 
-export const expectLogoutResponse = (value: unknown): LogoutResponse => {
+export const expectLogoutResponse = (value: unknown): TLogoutResponse => {
   if (!isRecord(value) || typeof value.success !== 'boolean') {
     throw new Error('Expected logout response');
   }

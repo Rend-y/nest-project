@@ -6,7 +6,7 @@ import { UsersRepository } from '../../../users/repository/users.repository';
 import { LoginRequestDto } from './dto/request.dto';
 import { LoginResponseDto } from './dto/response.dto';
 
-type AuthMeta = {
+type TAuthMeta = {
   userAgent?: string | null;
   ip?: string | null;
 };
@@ -22,7 +22,7 @@ export class LoginUseCase {
 
   async execute(
     dto: LoginRequestDto,
-    meta: AuthMeta,
+    meta: TAuthMeta,
   ): Promise<LoginResponseDto> {
     const user = await this.usersRepository.findOne({
       where: { username: dto.username },

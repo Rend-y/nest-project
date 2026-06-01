@@ -4,16 +4,7 @@ import { TokenService } from '../../../core/auth';
 import { AuthSessionsRepository } from '../repository/auth-sessions.repository';
 import { UserEntity } from '../../users/entities/user.entity';
 import { PasswordHasherService } from './password-hasher.service';
-
-type SessionMeta = {
-  userAgent?: string | null;
-  ip?: string | null;
-};
-
-export type TokenPair = {
-  accessToken: string;
-  refreshToken: string;
-};
+import { TSessionMeta, TTokenPair } from '../types/token-pair.service';
 
 @Injectable()
 export class TokenPairService {
@@ -23,7 +14,7 @@ export class TokenPairService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async create(user: UserEntity, meta: SessionMeta): Promise<TokenPair> {
+  async create(user: UserEntity, meta: TSessionMeta): Promise<TTokenPair> {
     const sessionId = randomUUID();
     const refreshToken = await this.tokenService.signRefreshToken(
       user.id,
@@ -43,16 +34,18 @@ export class TokenPairService {
       }),
     );
 
+    const accessToken = await this.tokenService.signAccessToken(
+      user.id,
+      sessionId,
+    );
+
     return {
-      accessToken: await this.tokenService.signAccessToken(
-        user.id,
-        user.username,
-      ),
+      accessToken,
       refreshToken,
     };
   }
 
-  async rotate(refreshToken: string): Promise<TokenPair> {
+  async rotate(refreshToken: string): Promise<TTokenPair> {
     const payload = await this.tokenService.verifyRefreshToken(refreshToken);
     const session = await this.authSessionsRepository.findOne({
       where: { id: payload.sid, userId: payload.sub },

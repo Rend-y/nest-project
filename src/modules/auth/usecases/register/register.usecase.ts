@@ -7,7 +7,7 @@ import { UserEntity } from '../../../users/entities/user.entity';
 import { RegisterRequestDto } from './dto/request.dto';
 import { RegisterResponseDto } from './dto/response.dto';
 
-type AuthMeta = {
+type TAuthMeta = {
   userAgent?: string | null;
   ip?: string | null;
 };
@@ -22,7 +22,7 @@ export class RegisterUseCase {
 
   async execute(
     dto: RegisterRequestDto,
-    meta: AuthMeta,
+    meta: TAuthMeta,
   ): Promise<RegisterResponseDto> {
     const user = await this.dataSource.transaction(async (manager) => {
       const usersRepository = manager.getRepository(UserEntity);
