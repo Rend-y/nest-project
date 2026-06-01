@@ -12,6 +12,12 @@ export type TUserResponse = {
 
 export type TListUsersResponse = {
   users: TUserResponse[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 };
 
 export type TLogoutResponse = {
@@ -56,12 +62,26 @@ export const expectUserResponse = (value: unknown): TUserResponse => {
 };
 
 export const expectListUsersResponse = (value: unknown): TListUsersResponse => {
-  if (!isRecord(value) || !Array.isArray(value.users)) {
+  if (
+    !isRecord(value) ||
+    !Array.isArray(value.users) ||
+    !isRecord(value.pagination) ||
+    typeof value.pagination.page !== 'number' ||
+    typeof value.pagination.limit !== 'number' ||
+    typeof value.pagination.total !== 'number' ||
+    typeof value.pagination.totalPages !== 'number'
+  ) {
     throw new Error('Expected list users response');
   }
 
   return {
     users: value.users.map((user) => expectUserResponse(user)),
+    pagination: {
+      page: value.pagination.page,
+      limit: value.pagination.limit,
+      total: value.pagination.total,
+      totalPages: value.pagination.totalPages,
+    },
   };
 };
 
