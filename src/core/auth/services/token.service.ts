@@ -17,8 +17,8 @@ export class TokenService {
   ) {}
 
   signAccessToken(userId: string, username: string): Promise<string> {
-    return this.jwtService.signAsync(
-      { sub: userId, username, type: 'access' } satisfies TAccessTokenPayload,
+    return this.jwtService.signAsync<TAccessTokenPayload>(
+      { sub: userId, username, type: 'access' },
       {
         secret: this.authConfig.accessSecret,
         expiresIn: this.authConfig.accessTtlSeconds,
@@ -46,13 +46,13 @@ export class TokenService {
   }
 
   signRefreshToken(userId: string, sessionId: string): Promise<string> {
-    return this.jwtService.signAsync(
+    return this.jwtService.signAsync<TRefreshTokenPayload>(
       {
         sub: userId,
         sid: sessionId,
         jti: randomUUID(),
         type: 'refresh',
-      } satisfies TRefreshTokenPayload,
+      },
       {
         secret: this.authConfig.refreshSecret,
         expiresIn: this.authConfig.refreshTtlSeconds,
