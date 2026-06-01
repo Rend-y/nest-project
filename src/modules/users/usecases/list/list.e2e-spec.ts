@@ -154,4 +154,23 @@ describe('ListUsersController e2e', () => {
       .set('Authorization', bearer(auth.accessToken))
       .expect(400);
   });
+
+  it('uses defaults for empty optional query values', async () => {
+    const { api, registerUser } = getContext();
+    const { auth } = await registerUser();
+
+    const response = await api()
+      .get('/users/list')
+      .query({ page: '', limit: '', username: '' })
+      .set('Authorization', bearer(auth.accessToken))
+      .expect(200);
+    const users = expectListUsersResponse(response.body);
+
+    expect(users.pagination).toEqual({
+      page: 1,
+      limit: 20,
+      total: 1,
+      totalPages: 1,
+    });
+  });
 });

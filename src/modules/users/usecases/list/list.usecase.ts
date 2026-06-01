@@ -9,8 +9,8 @@ export class ListUsersUseCase {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute(dto: ListUsersRequestDto): Promise<ListUsersResponseDto> {
-    const page = dto.page;
-    const limit = dto.limit;
+    const page = dto.page ?? 1;
+    const limit = dto.limit ?? 20;
     const query = this.usersRepository
       .createQueryBuilder('user')
       .orderBy('user.createdAt', 'DESC')
