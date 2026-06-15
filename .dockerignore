@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+.git
+.idea
+*.log
+.env
+.env.*
+docker-compose*.yml
+Dockerfile
